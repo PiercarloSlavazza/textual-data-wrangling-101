@@ -221,6 +221,40 @@ perc:10(millis)	perc:20(millis)	perc:30(millis)	perc:40(millis)	perc:50(millis)	
 </details>
 
 <details>
+  <summary>Un'immagine vale più di mille parole: usiamo gnuplot nel terminale per fare il plotting dei dati</summary>
+
+```shell
+cat data.csv | awk -F\| '$6 ~ /SUCCESS/  {print $10}' | sort -n -r | gnuplot -e 'set term dumb; pl "-" pt "*"'
+```
+
+```
+  1600 +-------------------------------------------------------------------+   
+       |        +       +        +       +        +       +        +       |   
+  1400 |-+                                                     "-"    *  +-|   
+       |                                                                   |   
+       |                                                                   |   
+  1200 |-+                                                               +-|   
+       |                                                                   |   
+  1000 |*+                                                               +-|   
+       |*                                                                  |   
+       |**                                                                 |   
+   800 |-***                                                             +-|   
+       |   ****                                                            |   
+   600 |-+    *****                                                      +-|   
+       |          ******                                                   |   
+       |               *******                                             |   
+   400 |-+                   *********                                   +-|   
+       |                             *********                             |   
+   200 |-+                                   *********                   +-|   
+       |                                             **********            |   
+       |        +       +        +       +        +       +   **********   |   
+     0 +-------------------------------------------------------------------+   
+       0      10000   20000    30000   40000    50000   60000    70000   80000 
+```
+
+</details>
+
+<details>
   <summary>Possiamo anche usare la groupby e avere dati semplici e precisi sui tempi per ogni tipo</summary>
 
 ```shell

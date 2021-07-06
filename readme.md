@@ -6,6 +6,25 @@ In questo progetto:
 * un breve tutorial - in forma di esercizio - finalizzato a mostrare l'uso di vari strumenti a riga di comando Unix per l'ispezione e l'elaborazione di file CSV (siano essi dati o logs)
     * nel caso dei logs, tenere presente che è sempre necessario definire a monte un minimo insieme di "best practices" tali per cui essi si prestino a essere facilmente elaborati mediante i tool descritti in questa pagina
     
+## Perché usare istruzioni da riga di comando e non importare in Excel o in un database o usare altri strumenti di analisi dati (p.e. R)?
+
+Sono tutti strumenti validi - e spesso _più_ validi  di quelli a riga di comando.
+
+Ci sono però delle situazioni in cui è molto utile utilizzare - almeno come prima opzione - la riga di comando, p.e.:
+
+* voglio fare dei conteggi relativamente semplici molto velocemente
+* i dati stanno cambiando velocemente e voglio rifare molteplici volte i medesimi conteggi a piccola distanza temporale l'uno dall'altro
+* voglio verificare diverse ipotesi sui dati velocemente
+
+Tutto sta dunque nella velocità e comodità dello strumento.
+
+## Perché è più veloce dell'uso p.e. di Excel?
+
+La maggior parte delle analisi che ci è necessario fare può essere eseguita:
+
+* filtrando i dati e qualificandoli in forma tabellare, con semantica esatta delle colonne ⇒ è un meccanismo base di grep + awk, che si ottiene memorizzando pochissimi concetti base e una semplice sintassi
+* aggregando i dati ⇒ awk
+* calcolando statistiche sui dati ⇒ datamash
 
 # Sample data
 

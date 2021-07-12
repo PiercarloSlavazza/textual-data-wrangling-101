@@ -337,7 +337,7 @@ cat data.csv | awk -F\| 'BEGIN {print "index,outcome,type,error,millis"} {isSucc
 </details>
 
 <details>
-  <summary>Usiamo [csvkit](https://csvkit.readthedocs.io/en/latest/) per importare "al volo" il file CSV in una DB SQLite</summary>
+  <summary>Usiamo csvkit https://csvkit.readthedocs.io/en/latest/ per importare "al volo" il file CSV in una DB SQLite</summary>
 
 ```shell
 csvsql --db sqlite:///data.db --insert data_tabular.csv

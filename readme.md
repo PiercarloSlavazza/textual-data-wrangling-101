@@ -301,3 +301,75 @@ Da notare che per separare le colonne dobbiamo usare `\t` nei comandi awk.
   )
 
 </details>
+
+## Analizziamo i dati mediant SQL - ma dalla linea di comando
+
+<details>
+  <summary>Con AWK trasformiamo il log in "forma tabellare" CSV</summary>
+
+```shell
+cat data.csv | awk -F\| 'BEGIN {print "index,outcome,type,error,millis"} {isSuccess = $6 == "SUCCESS"; print $3 "," $6 "," ((isSuccess) ? $8 : "") "," ((!isSuccess) ? $8 : "") "," $10}'
+```
+
+Il risultato sarà del tipo:
+
+```
+index,outcome,type,error,millis
+0,SUCCESS,PARERE,,426
+1,SUCCESS,MEMORIA,,244
+2,SUCCESS,MEMORIA,,467
+3,FAILURE,,FILE_NOT_FOUND,67
+4,SUCCESS,MEMORIA,,641
+5,SUCCESS,ATTO_DI_CITAZIONE,,237
+6,FAILURE,,FILE_NOT_FOUND,113
+7,SUCCESS,ATTO_DI_CITAZIONE,,203
+8,SUCCESS,MEMORIA,,617
+…
+```
+
+Provvediamo per comodità a scrivere quanto sopra in un file `data_tabular.csv`:
+
+```shell
+cat data.csv | awk -F\| 'BEGIN {print "index,outcome,type,error,millis"} {isSuccess = $6 == "SUCCESS"; print $3 "," $6 "," ((isSuccess) ? $8 : "") "," ((!isSuccess) ? $8 : "") "," $10}' > data_tabular.csv
+```
+
+
+</details>
+
+<details>
+  <summary>Usiamo [csvkit](https://csvkit.readthedocs.io/en/latest/) per importare "al volo" il file CSV in una DB SQLite</summary>
+
+```shell
+csvsql --db sqlite:///data.db --insert data_tabular.csv
+```
+
+Il database verrà creato in un file `data.db` che sarà scritto nel folder in cui il comando viene eseguito.
+
+</details>
+
+<details>
+  <summary>Ora possiamo interrogare il DB con statements SQL: p.e. interroghiamo il database per ottenere i tempi medi per ogni errore</summary>
+
+```shell
+sql2csv --db sqlite:///data.db --query "select error, avg(millis) from data_tabular where error is not null group by error"
+```
+
+Otterremo questo output:
+
+```
+error,avg(millis)
+CANNOT_OPEN_FILE,344.4945689069925
+FILE_NOT_FOUND,346.442634164542
+UNSUPPORTED_ENCODING,344.78375634517766
+```
+
+</details>
+
+<details>
+  <summary>Takeaways</summary>
+
+* csvkit è una "suite" di tools da riga di comando per manipolare, analizzare e interrogare file CSV - eventualmente con l'ausilio di SQL
+* un file di log (in un formato "standard") mediante awk può essere trasformato in un insieme di dati tabellari che possono essere importati in un db SQLite
+* a questo punto posso interrogare direttamente i dati mediante SQL usando sempre csvkit
+
+</details>

@@ -10,3 +10,5 @@
 /sample-data-generator.iml
 /test.csv
 data.csv
+data_tabular.csv
+data.db

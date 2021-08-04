@@ -148,7 +148,7 @@ outcome|count
   <summary>Aggiungiamo il tempo medio di processing per ogni tipo: dobbiamo usare gli array associativi</summary>
 
 ```shell
-cat data.csv | grep -i success  | awk -F\| '{types[$8]++;millis[$8]+=$10} END {for (type in types) print type " " types[type] " " (millis[type]/types[type])}' | sort -k 3 -n -r
+cat data.csv | grep -i success  | awk -F\| '{types_count[$8]++;millis[$8]+=$10} END {for (type in types_count) print type " " types_count[type] " " (millis[type]/types_count[type])}' | sort -k 3 -n -r
 ```
 
 |outcome|count|mean time in millis
@@ -164,7 +164,7 @@ cat data.csv | grep -i success  | awk -F\| '{types[$8]++;millis[$8]+=$10} END {f
   <summary>Il grep su success è impreciso: possiamo migliorare con il "pattern matching"</summary>
 
 ```shell
-cat data.csv | awk -F\| '$6 ~ /SUCCESS/ {types[$8]++;millis[$8]+=$10} END {for (type in types) print type " " types[type] " " (millis[type]/types[type])}' | sort -k 3 -n -r
+cat data.csv | awk -F\| '$6 ~ /SUCCESS/ {types_count[$8]++;millis[$8]+=$10} END {for (type in types_count) print type " " types_count[type] " " (millis[type]/types_count[type])}' | sort -k 3 -n -r
 ```
 
 </details>
@@ -183,12 +183,15 @@ cat data.csv | awk -F\| '$6 ~ /SUCCESS/ {types[$8]++;millis[$8]+=$10} END {for (
   <summary>Troviamo il tempo medio di esecuzione - dei successi</summary>
 
 ```shell
-cat data.csv | awk -F\| '$6 ~ /SUCCESS/ {total_millis+=$10} END {print total_millis/NR}'
+cat data.csv | awk -F\| '$6 ~ /SUCCESS/ {total_millis+=$10;successes_count++} END {print total_millis/successes_count}'
 ```
 
 ```
 279,319
 ```
+
+Da notare che in una una precedente versione di questo script, invece che `successes_count` veniva usata la variabile built-in `NR`: tuttavia, `NR` dà il numero totale di righe processate, mentre in questo caso era necessario utilizzare il numero di righe che avevano sofddisfato il pattern match (numero per il quale non mi risulta esista una variabile built-in ad hoc).
+
 
 </details>
 

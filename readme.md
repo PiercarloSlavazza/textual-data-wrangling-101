@@ -83,7 +83,7 @@ cat data.csv | awk -F\| '{print $6}' | sort | uniq -c | awk 'BEGIN {print "|outc
   <summary>Aggiungo l'ordinamento su colonna usando sort</summary>
 
 ```shell
-cat data.csv | awk -F\| '{print $6}' | sort | uniq -c | sort -k 2 -n -r |  awk 'BEGIN {print "|outcome|count\n|---|---"}  {print "|" $2 "|" $1 }'
+cat data.csv | awk -F\| '{print $6}' | sort | uniq -c | sort -k 1 -n -r |  awk 'BEGIN {print "|outcome|count\n|---|---"}  {print "|" $2 "|" $1 }'
 ```
 
 outcome|count
@@ -101,7 +101,7 @@ outcome|count
     * devo definire il separatore con `-F` - e il più delle volte devo mettere l'escape char `\` - p.e. `-F\|`
     * faccio riferimento alla colonna i-esima con `$i`
     * il comando è sempre `'{ C-like command }'`
-    * posso mettere comandi PRIMA dell'elaborazione delle righe e alla fine - p.e. `'{prima} BEGIN {singole righe} END {dopo}'`
+    * posso mettere comandi PRIMA dell'elaborazione delle righe e alla fine - p.e. `'BEGIN {prima} {singole righe} END {dopo}'`
 * uniq
     * elimina le righe duplicate
     * se metto `-c` le conta ⇒ ha dunque l'effetto di una "group by" - MA devo prima fare `sort` perché le righe duplicate devo essere _consecutive_
